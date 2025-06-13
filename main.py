@@ -1,14 +1,14 @@
 import streamlit as st
 import random
 
-# 페이지 기본 설정
+# 페이지 설정
 st.set_page_config(
     page_title="🎮 가위바위보 게임 🥳",
     page_icon="✂️🪨📄",
     layout="centered"
 )
 
-# 스타일 적용 (배경, 글자, 버튼 등)
+# CSS 스타일링
 st.markdown("""
 <style>
 body {
@@ -24,7 +24,7 @@ h1 {
 .game-result {
     font-size: 2rem;
     font-weight: bold;
-    padding: 15px;
+    padding: 15px 25px;
     border-radius: 10px;
     margin-top: 20px;
     text-align: center;
@@ -46,7 +46,7 @@ h1 {
 }
 .stButton > button {
     font-size: 2rem !important;
-    padding: 15px 25px !important;
+    padding: 15px 30px !important;
     margin: 10px !important;
     border-radius: 15px !important;
     border: none !important;
@@ -65,14 +65,14 @@ st.title("🎮 가위바위보 게임에 오신 것을 환영합니다! 🥳")
 
 st.write("👇 아래 버튼 중 하나를 눌러서 당신의 선택을 해주세요! 👇")
 
-# 선택지
+# 선택지 및 이모지 맵핑
 choices = ["가위", "바위", "보"]
-emoji_map = {"가위":"✂️", "바위":"🪨", "보":"📄"}
+emoji_map = {"가위": "✂️", "바위": "🪨", "보": "📄"}
 
-# 사용자 선택 초기값 None
+# 사용자 선택 변수 초기화
 user_choice = None
 
-# 버튼 3개 가로배치
+# 버튼 3개를 가로로 배치
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -85,9 +85,32 @@ with col3:
     if st.button(f"{emoji_map['보']} 보"):
         user_choice = "보"
 
-# 게임 결과 처리
+# 게임 결과 표시
 if user_choice:
     comp_choice = random.choice(choices)
 
     st.markdown(f"### 당신의 선택: {emoji_map[user_choice]} {user_choice}")
-    st.markdow
+    st.markdown(f"### 컴퓨터의 선택: {emoji_map[comp_choice]} {comp_choice}")
+
+    if user_choice == comp_choice:
+        st.markdown(
+            '<div class="game-result draw">😐 비겼어요! 다시 해보세요! 😐</div>',
+            unsafe_allow_html=True,
+        )
+    elif (user_choice == "가위" and comp_choice == "보") or \
+         (user_choice == "바위" and comp_choice == "가위") or \
+         (user_choice == "보" and comp_choice == "바위"):
+        st.markdown(
+            '<div class="game-result win">🎉 당신이 이겼어요! 축하합니다! 🎉</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            '<div class="game-result lose">😢 컴퓨터가 이겼어요! 다음 기회에! 😢</div>',
+            unsafe_allow_html=True,
+        )
+else:
+    st.info("아래 버튼 중에서 선택해주세요!")
+
+st.markdown("---")
+st.write("Made with ❤️ by ChatGPT")
